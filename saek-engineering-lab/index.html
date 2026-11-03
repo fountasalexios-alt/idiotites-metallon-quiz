@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#101e31">
+<title>Μηχανολογικό Εργαστήριο ΣΑΕΚ | 3D & Τεχνικό Σχέδιο</title>
+<style>
+:root{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#e9f1ff;background:#08111f;font-synthesis:none}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 76% 3%,#193553 0,transparent 40%),#08111f}
+button,input,select{font:inherit}button,select,input[type=number]{border:1px solid #34506d;border-radius:10px;background:#12263c;color:#edf5ff;padding:10px 12px}
+button{cursor:pointer}button:hover{border-color:#6ad7e1}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #6ad7e1;outline-offset:2px}
+button.primary{background:#32d0c8;color:#09232c;border-color:#32d0c8;font-weight:750}button.ghost{background:transparent}
+header{padding:22px clamp(16px,4vw,50px);border-bottom:1px solid #263e58;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}.brandmark{display:grid;place-items:center;width:46px;height:46px;border-radius:14px;background:#1b475b;color:#70f2e3;font-size:25px}
+h1,h2,h3,p{margin-top:0}h1{font-size:clamp(22px,2.6vw,32px);margin-bottom:3px}header p{color:#9eb4ca;margin:0;font-size:13px}
+.header-badge{color:#a8f5dd;border:1px solid #32685c;border-radius:999px;padding:8px 14px;font-size:12px}
+main{max-width:1550px;margin:auto;padding:22px clamp(14px,3vw,40px) 55px}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}.tabs button{border-radius:999px;padding:10px 17px}.tabs button[aria-selected=true]{background:#35d3cc;border-color:#35d3cc;color:#05222d;font-weight:800}
+.workspace{display:grid;grid-template-columns:minmax(280px,330px) minmax(0,1fr);gap:18px;align-items:start}.panel{border:1px solid #26415d;background:#101e31;border-radius:18px;box-shadow:0 15px 40px #0002}.sidebar{padding:20px}.panel-title{color:#e9f1ff;font-size:16px;font-weight:750;margin-bottom:15px}.muted{color:#91a9c4}.small{font-size:12px}.side-section{padding-bottom:17px;margin-bottom:17px;border-bottom:1px solid #274056}.side-section:last-child{margin-bottom:0;border:0;padding:0}
+.field{margin-bottom:12px}.field label{display:flex;align-items:center;justify-content:space-between;gap:8px;color:#bfd0e4;font-size:13px;margin-bottom:6px}.field input,.field select{width:100%;min-width:0}
+fieldset{border:0;padding:0;margin:0}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.hint{font-size:12px;line-height:1.55;color:#98afc6}.drop{display:block;border:1px dashed #57849a;border-radius:14px;padding:14px;background:#12293b;text-align:center;cursor:pointer}.drop:hover{border-color:#6ad7e1}.drop input{width:100%;margin-top:9px;font-size:12px}.drop strong{font-size:14px}
+.actions{display:flex;flex-wrap:wrap;gap:8px}.actions button{flex:1 1 auto}.viewport{padding:16px}.canvasbox{position:relative;background:linear-gradient(140deg,#10263e,#091625);border:1px solid #284767;border-radius:14px;overflow:hidden}
+#viewer{width:100%;height:clamp(340px,52vw,550px);display:block;touch-action:none;cursor:grab}#viewer:active{cursor:grabbing}
+.canvas-caption{position:absolute;left:16px;top:15px;color:#c4d9e7;font-size:12px;background:#0c2034b0;border:1px solid #3b5d78;border-radius:20px;padding:7px 11px}
+.view-buttons{display:flex;flex-wrap:wrap;gap:7px;margin-top:15px}.view-buttons button{font-size:12px;padding:9px 11px}.view-buttons button.active{background:#2e6572;border-color:#77efe5}
+.output{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-top:15px}.stat{font-size:13px;color:#a7bfd4}
+#sheetWrap{display:none;padding:15px}.sheetarea{border-radius:9px;background:#fff;overflow:auto}#sheetSvg{display:block;width:100%;height:auto;min-width:600px}.sheet-meta{padding:12px 0;color:#9db5cd;font-size:12px}
+#lesson{display:none;padding:22px}.lesson-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin:15px 0}.lesson-card{background:#15283d;border:1px solid #34506b;border-radius:14px;padding:15px}.lesson-card h3{font-size:15px;margin-bottom:8px}.lesson-card p{font-size:13px;line-height:1.7;margin:0;color:#b4c7db}
+.qbox{border-top:1px solid #38516c;margin-top:25px;padding-top:20px}.question{background:#12283c;border:1px solid #2a5368;padding:15px;border-radius:12px;margin:10px 0}.question strong{display:block;margin-bottom:10px}.answers{display:flex;flex-wrap:wrap;gap:8px}.answers button{font-size:13px}.answers button.correct{background:#144f47;border-color:#51d1b6}.answers button.wrong{background:#623039;border-color:#fa9898}.feedback{font-size:13px;margin-top:9px;color:#d0e1ef}
+.hidden{display:none!important}.info{font-size:13px;padding:11px 13px;border:1px solid #396178;background:#142c42;border-radius:10px;margin-top:13px;line-height:1.55}
+footer{color:#7893ad;font-size:12px;text-align:center;margin-top:28px}
+@media(max-width:890px){.workspace{grid-template-columns:1fr}.sidebar{order:1}.viewport{order:2}.lesson-grid{grid-template-columns:1fr}}
+@media print{body{background:white}header,.tabs,.sidebar,.viewport,footer{display:none!important}}
+</style>
+</head>
+<body>
+<header>
+ <div class="brand"><div class="brandmark" aria-hidden="true">⬡</div><div><h1>Μηχανολογικό Εργαστήριο ΣΑΕΚ</h1><p>Διαδραστική μοντελοποίηση · τεχνικές όψεις · ασκήσεις κατανόησης</p></div></div>
+ <span class="header-badge">Αυτόνομη εφαρμογή · χωρίς αποστολή αρχείων</span>
+</header>
+<main>
+<nav class="tabs" aria-label="Ενότητες εφαρμογής">
+ <button data-tab="model" aria-selected="true">3D μοντέλο & όψεις</button>
+ <button data-tab="sheet" aria-selected="false">Τεχνικό σχέδιο Α3</button>
+ <button data-tab="lesson" aria-selected="false">Μάθημα & αυτοαξιολόγηση</button>
+</nav>
+<div class="workspace">
+<aside class="panel sidebar">
+ <div class="panel-title">Ρυθμίσεις εξαρτήματος</div>
+ <div class="side-section">
+ <div class="field"><label for="shape">Έτοιμο γεωμετρικό μοντέλο</label><select id="shape">
+ <option value="bracket">Γωνιακό προφίλ (L)</option><option value="box">Ορθογώνιο παραλληλεπίπεδο</option><option value="cylinder">Κύλινδρος</option><option value="tube">Κοίλος σωλήνας</option></select></div>
+ <div class="two"><div class="field"><label for="w">Πλάτος <span>mm</span></label><input id="w" type="number" min="5" max="1000" step="1" value="140"></div>
+ <div class="field"><label for="h">Ύψος <span>mm</span></label><input id="h" type="number" min="5" max="1000" step="1" value="105"></div></div>
+ <div class="two"><div class="field"><label for="d">Βάθος <span>mm</span></label><input id="d" type="number" min="5" max="1000" step="1" value="65"></div>
+ <div class="field"><label for="t">Πάχος <span>mm</span></label><input id="t" type="number" min="1" max="400" step="1" value="20"></div></div>
+ <p class="hint" id="paramHelp">Για το γωνιακό προφίλ, το πάχος αφορά τα δύο σκέλη του L.</p>
+ <div class="actions"><button id="reset" class="ghost">Επαναφορά</button><button id="saveModel">Αποθήκευση παραμέτρων</button></div>
+ </div>
+ <div class="side-section"><div class="panel-title">Εισαγωγή αρχείου 3D</div>
+ <label class="drop" for="upload"><strong>Επίλεξε STL, OBJ, GLB ή glTF</strong><span class="hint" style="display:block;margin-top:5px">Από τον υπολογιστή σου · όριο 15 MB ανά αρχείο</span>
+ <input id="upload" type="file" accept=".stl,.obj,.glb,.gltf,.bin" multiple></label>
+ <p class="hint">Για glTF με εξωτερικό αρχείο .bin, επίλεξε και τα δύο αρχεία μαζί. Η απεικόνιση αφορά τη γεωμετρία, χωρίς υφές ή κινήσεις. Οι μονάδες εισαγωγής θεωρούνται mm, εκτός αν τις έχει ορίσει διαφορετικά ο δημιουργός.</p>
+ </div>
+ <div class="side-section"><div class="panel-title">Εξαγωγές</div>
+ <div class="actions"><button class="primary" id="svgExport">SVG Α3</button><button id="pngExport">PNG Α3</button><button id="pdfExport">Εκτύπωση / PDF</button></div>
+ <p class="hint">Το PDF παράγεται με «Αποθήκευση ως PDF» από το παράθυρο εκτύπωσης. Οι όψεις είναι εκπαιδευτικές και δεν αποτελούν πιστοποιημένο σχέδιο κατασκευής.</p></div>
+ <div id="message" role="status" aria-live="polite" class="info">Έτοιμο. Άλλαξε διαστάσεις ή σύρε το 3D μοντέλο.</div>
+</aside>
+<section class="panel viewport" id="model">
+ <div class="panel-title">Προβολή τρισδιάστατου εξαρτήματος</div>
+ <div class="canvasbox"><canvas id="viewer" aria-label="Διαδραστική τρισδιάστατη προβολή του εξαρτήματος"></canvas><div class="canvas-caption">Σύρε για περιστροφή · ροδέλα για μεγέθυνση</div></div>
+ <div class="view-buttons" id="views" aria-label="Επτά όψεις"><button data-view="front">Πρόσοψη</button><button data-view="top">Κάτοψη</button><button data-view="right">Δεξιά</button><button data-view="left">Αριστερά</button><button data-view="back">Πίσω</button><button data-view="bottom">Κάτω</button><button data-view="iso" class="active">Ισομετρική</button></div>
+ <div class="output"><div class="stat" id="dimensions">Διαστάσεις: 140 × 105 × 65 mm</div><button id="toSheet" class="primary">Προβολή φύλλου Α3</button></div>
+</section>
+<section class="panel" id="sheetWrap"><div class="panel-title">Φύλλο τεχνικών όψεων · A3 (420 × 297 mm)</div>
+ <div class="sheetarea"><svg id="sheetSvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1190 842" role="img" aria-label="Τεχνικό σχέδιο με επτά όψεις του εξαρτήματος"></svg></div>
+ <p class="sheet-meta">Δυναμικά παραγόμενο SVG. Οι κρυφές ακμές επισημαίνονται διακεκομμένα όπου ανιχνεύονται από τον προσανατολισμό των επιφανειών. Η κλίμακα προσαρμόζεται αυτόματα ανά όψη.</p>
+ <div class="actions"><button class="primary" id="sheetSvgExport">Λήψη SVG</button><button id="sheetPngExport">Λήψη PNG</button><button id="sheetPdfExport">Εκτύπωση / PDF</button></div>
+</section>
+<section class="panel" id="lesson"><h2>Από το τρισδιάστατο αντικείμενο στο τεχνικό σχέδιο</h2>
+ <p class="muted">Σύντομη ενότητα για τη Μηχανολογία και το τεχνικό σχέδιο σε ΣΑΕΚ. Χρησιμοποίησε το μοντέλο και σύγκρινε τις όψεις του.</p>
+ <div class="lesson-grid"><article class="lesson-card"><h3>Πρόσοψη</h3><p>Ορθογραφική προβολή του αντικειμένου από μπροστά. Συνήθως αποτυπώνει το πλάτος και το ύψος.</p></article>
+ <article class="lesson-card"><h3>Κάτοψη</h3><p>Προβολή από επάνω. Δείχνει πλάτος και βάθος και συμπληρώνει την πληροφορία της πρόσοψης.</p></article>
+ <article class="lesson-card"><h3>Πλάγια όψη</h3><p>Προβολή από το πλάι, χρήσιμη για το ύψος και το βάθος του εξαρτήματος.</p></article>
+ <article class="lesson-card"><h3>Ισομετρική</h3><p>Τρισδιάστατη απεικόνιση που βοηθά να αντιληφθούμε τον όγκο, αλλά δεν υποκαθιστά τις διαστασιολογημένες όψεις.</p></article></div>
+ <div class="qbox"><h2>Μικρό τεστ αυτοαξιολόγησης</h2><p class="muted small">Άμεση ανατροφοδότηση και τελική βαθμολογία.</p><div id="quiz"></div><div class="output"><strong id="score">0/4 απαντήσεις</strong><button id="restartQuiz">Επανεκκίνηση τεστ</button></div></div>
+</section>
+</div>
+<footer>Εκπαιδευτικό εργαλείο ΣΑΕΚ · ανεξάρτητη υλοποίηση HTML, SVG και JavaScript · λειτουργεί τοπικά στον browser</footer>
+</main>
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+const TAU = Math.PI*2;
+const poses = {front:[0,0],top:[0,-Math.PI/2],right:[Math.PI/2,0],left:[-Math.PI/2,0],back:[Math.PI,0],bottom:[0,Math.PI/2],iso:[-.72,.46]};
+const viewTitles = {front:"ΠΡΟΣΟΨΗ",top:"ΚΑΤΟΨΗ",right:"ΔΕΞΙΑ ΟΨΗ",left:"ΑΡΙΣΤΕΡΗ ΟΨΗ",back:"ΠΙΣΩ ΟΨΗ",bottom:"ΚΑΤΩ ΟΨΗ",iso:"ΙΣΟΜΕΤΡΙΚΗ"};
+const defaultState = {shape:"bracket",w:140,h:105,d:65,t:20,yaw:-.72,pitch:.46,zoom:1};
+let state = {...defaultState,triangles:[],fileName:"",imported:false};
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+const fmt=n=>Number(n).toLocaleString("el-GR",{maximumFractionDigits:1});
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&apos;"}[c]));
+function status(msg){$("message").textContent=msg}
+function vec(x,y,z){return [x,y,z]}
+function tri(out,a,b,c){out.push([a,b,c])}
+function box(out,w,h,d){
+ let x=w/2,y=h/2,z=d/2,p=[[-x,-y,-z],[x,-y,-z],[x,y,-z],[-x,y,-z],[-x,-y,z],[x,-y,z],[x,y,z],[-x,y,z]];
+ for(const f of [[0,1,2,3],[4,7,6,5],[0,4,5,1],[1,5,6,2],[2,6,7,3],[3,7,4,0]]){tri(out,p[f[0]],p[f[1]],p[f[2]]);tri(out,p[f[0]],p[f[2]],p[f[3]])}
+}
+function bracket(out,w,h,d,t){
+ let p=[[-w/2,-h/2],[w/2,-h/2],[w/2,-h/2+t],[-w/2+t,-h/2+t],[-w/2+t,h/2],[-w/2,h/2]];
+ let front=p.map(x=>vec(x[0],x[1],d/2)),rear=p.map(x=>vec(x[0],x[1],-d/2));
+ for(const f of [[0,1,2],[0,2,3],[0,3,5],[3,4,5]]){tri(out,front[f[0]],front[f[1]],front[f[2]]);tri(out,rear[f[2]],rear[f[1]],rear[f[0]])}
+ for(let i=0;i<6;i++){let j=(i+1)%6;tri(out,front[i],rear[i],rear[j]);tri(out,front[i],rear[j],front[j])}
+}
+function roundModel(out,r1,r2,len){
+ let n=40,z1=-len/2,z2=len/2;
+ for(let i=0;i<n;i++){
+ let a=i*TAU/n,b=(i+1)*TAU/n;
+ const q=(r,z,ang)=>vec(Math.cos(ang)*r,Math.sin(ang)*r,z);
+ let ao=q(r1,z1,a),bo=q(r1,z1,b),at=q(r1,z2,a),bt=q(r1,z2,b);
+ tri(out,ao,bo,bt);tri(out,ao,bt,at);
+ if(r2>0){
+ let ia=q(r2,z1,a),ib=q(r2,z1,b),it=q(r2,z2,a),jt=q(r2,z2,b);
+ tri(out,at,bt,jt);tri(out,at,jt,it);tri(out,ib,ia,it);tri(out,ib,it,jt);
+ tri(out,ia,ib,bo);tri(out,ia,bo,ao)
+ }else{
+ let top=vec(0,0,z2),bottom=vec(0,0,z1);
+ tri(out,top,at,bt);tri(out,bottom,bo,ao)
+ }
+ }
+}
+function buildPrimitive(){
+ const out=[],w=state.w,h=state.h,d=state.d,t=state.t;
+ if(state.shape==="box")box(out,w,h,d);
+ if(state.shape==="bracket")bracket(out,w,h,d,Math.min(t,w-.1,h-.1));
+ if(state.shape==="cylinder")roundModel(out,w/2,0,h);
+ if(state.shape==="tube")roundModel(out,w/2,Math.max(.1,w/2-Math.min(t,w/2-.1)),h);
+ state.triangles=out;state.imported=false;state.fileName="";
+ updateAll();
+}
+function xyzPoints(){return state.triangles.flat()}
+function bounds(points){
+ let mi=[Infinity,Infinity,Infinity],ma=[-Infinity,-Infinity,-Infinity];
+ for(const p of points)for(let i=0;i<3;i++){mi[i]=Math.min(mi[i],p[i]);ma[i]=Math.max(ma[i],p[i])}
+ if(!points.length)return {min:[0,0,0],max:[0,0,0]};
+ return {min:mi,max:ma}
+}
+function rot(p,yaw,pitch){
+ let cy=Math.cos(yaw),sy=Math.sin(yaw),cx=Math.cos(pitch),sx=Math.sin(pitch),x=p[0]*cy+p[2]*sy,z=-p[0]*sy+p[2]*cy;
+ return [x,p[1]*cx-z*sx,p[1]*sx+z*cx]
+}
+function norm(a,b,c){
+ let u=b.map((v,i)=>v-a[i]),v=c.map((v,i)=>v-a[i]);
+ let n=[u[1]*v[2]-u[2]*v[1],u[2]*v[0]-u[0]*v[2],u[0]*v[1]-u[1]*v[0]],length=Math.hypot(...n)||1;
+ return n.map(x=>x/length)
+}
+function prepared(yaw,pitch){
+ return state.triangles.map(points=>{let p=points.map(x=>rot(x,yaw,pitch)),n=norm(...p);return {p,n,depth:p.reduce((s,x)=>s+x[2],0)/3}}).sort((a,b)=>a.depth-b.depth)
+}
+function draw(){
+ let canvas=$("viewer"),rect=canvas.getBoundingClientRect(),ratio=Math.min(devicePixelRatio||1,2);
+ let width=Math.max(10,rect.width),height=Math.max(10,rect.height);
+ canvas.width=Math.round(width*ratio);canvas.height=Math.round(height*ratio);
+ const c=canvas.getContext("2d");c.scale(ratio,ratio);c.clearRect(0,0,width,height);
+ c.strokeStyle="#25445d";c.lineWidth=.65;
+ for(let x=0;x<width;x+=28){c.beginPath();c.moveTo(x,0);c.lineTo(x,height);c.stroke()}
+ for(let y=0;y<height;y+=28){c.beginPath();c.moveTo(0,y);c.lineTo(width,y);c.stroke()}
+ const ts=prepared(state.yaw,state.pitch),points=ts.flatMap(t=>t.p),b=bounds(points);
+ const extent=Math.max(b.max[0]-b.min[0],b.max[1]-b.min[1],1);
+ const scale=.71*Math.min(width,height)/extent*state.zoom,cx=(b.min[0]+b.max[0])/2,cy=(b.min[1]+b.max[1])/2;
+ let count=0;
+ for(const t of ts){
+ let p=t.p.map(q=>[(q[0]-cx)*scale+width/2,height/2-(q[1]-cy)*scale]);
+ let light=Math.max(0,.3*t.n[0]+.6*t.n[1]+.75*t.n[2]),v=Math.round(clamp(63+90*(light+1)/2,60,182));
+ c.beginPath();c.moveTo(...p[0]);c.lineTo(...p[1]);c.lineTo(...p[2]);c.closePath();
+ c.fillStyle="rgb("+(v-28)+","+(v+20)+","+(v+38)+")";c.fill();
+ c.strokeStyle="rgba(10,38,56,.42)";c.lineWidth=.6;c.stroke();count++;
+ }
+ if(!count){c.fillStyle="#cde1f3";c.textAlign="center";c.font="16px sans-serif";c.fillText("Δεν υπάρχουν γεωμετρικά δεδομένα",width/2,height/2)}
+}
+function edgeList(){
+ const edges=new Map();
+ const key=p=>p.map(v=>Math.round(v*1e4)).join(",");
+ for(const t of state.triangles){
+ let n=norm(...t);
+ for(const pair of [[0,1],[1,2],[2,0]]){
+ let a=t[pair[0]],b=t[pair[1]],ka=key(a),kb=key(b),k=ka<kb?ka+"|"+kb:kb+"|"+ka;
+ if(!edges.has(k))edges.set(k,{a,b,normals:[]});
+ edges.get(k).normals.push(n)
+ }
+ }
+ return [...edges.values()].filter(e=>e.normals.length<2||e.normals.some(n=>e.normals.some(m=>n.reduce((s,x,i)=>s+x*m[i],0)<.996)))
+}
+function svgSheet(){
+ const ts=state.triangles,ed=edgeList(),all=xyzPoints(),bb=bounds(all);
+ const spans=bb.max.map((v,i)=>v-bb.min[i]),dims=spans.map(fmt).join(" × ");
+ let s=['<svg xmlns="http://www.w3.org/2000/svg" width="420mm" height="297mm" viewBox="0 0 1190 842">'];
+ s.push('<rect width="1190" height="842" fill="#fff"/><rect x="17" y="17" width="1156" height="808" fill="none" stroke="#152c43" stroke-width="2"/>');
+ s.push('<text x="32" y="49" fill="#152c43" font-family="Arial,sans-serif" font-size="23" font-weight="700">ΜΗΧΑΝΟΛΟΓΙΚΟ ΕΡΓΑΣΤΗΡΙΟ | ΦΥΛΛΟ ΟΨΕΩΝ</text>');
+ s.push('<text x="34" y="69" fill="#3b556b" font-family="Arial,sans-serif" font-size="13">Εκπαιδευτικό σχέδιο — μονάδες mm — αυτόματη προσαρμογή απεικόνισης</text>');
+ const views=["front","top","right","left","back","bottom","iso"];
+ for(let i=0;i<8;i++){
+ let col=i%4,row=Math.floor(i/4),x=30+col*284,y=91+row*316,w=270,h=301;
+ s.push('<rect x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" fill="#fff" stroke="#b9c7d0"/>');
+ if(i===7){
+ s.push('<text x="'+(x+12)+'" y="'+(y+24)+'" font-family="Arial" font-size="14" fill="#18364b" font-weight="bold">ΥΠΟΜΝΗΜΑ</text>');
+ s.push('<line x1="'+(x+16)+'" y1="'+(y+67)+'" x2="'+(x+108)+'" y2="'+(y+67)+'" stroke="#173b53" stroke-width="1.5"/>');
+ s.push('<text x="'+(x+120)+'" y="'+(y+72)+'" font-family="Arial" font-size="12">Ορατή ακμή</text>');
+ s.push('<line x1="'+(x+16)+'" y1="'+(y+101)+'" x2="'+(x+108)+'" y2="'+(y+101)+'" stroke="#778b9c" stroke-width="1.2" stroke-dasharray="6 4"/>');
+ s.push('<text x="'+(x+120)+'" y="'+(y+106)+'" font-family="Arial" font-size="12">Πιθανή κρυφή</text>');
+ s.push('<text x="'+(x+16)+'" y="'+(y+165)+'" font-family="Arial" font-size="12" fill="#425466">Η γεωμετρία προβάλλεται</text>');
+ s.push('<text x="'+(x+16)+'" y="'+(y+183)+'" font-family="Arial" font-size="12" fill="#425466">χωρίς υφές ή ανοχές.</text>');
+ continue;
+ }
+ let id=views[i],ang=poses[id],pts=all.map(p=>rot(p,...ang)),b=bounds(pts),dx=Math.max(b.max[0]-b.min[0],1),dy=Math.max(b.max[1]-b.min[1],1);
+ let sc=Math.min((w-54)/dx,(h-75)/dy),mx=(b.min[0]+b.max[0])/2,my=(b.min[1]+b.max[1])/2;
+ const proj=p=>{let r=rot(p,...ang);return [x+w/2+(r[0]-mx)*sc,y+(h+12)/2-(r[1]-my)*sc]};
+ s.push('<text x="'+(x+12)+'" y="'+(y+21)+'" font-family="Arial" font-size="14" fill="#18364b" font-weight="bold">'+viewTitles[id]+'</text>');
+ s.push('<line x1="'+(x+11)+'" y1="'+(y+30)+'" x2="'+(x+w-11)+'" y2="'+(y+30)+'" stroke="#d4dce3"/>');
+ for(const e of ed){
+ let pa=proj(e.a),pb=proj(e.b),visible=e.normals.some(n=>rot(n,...ang)[2]>.02),style=visible?'stroke="#173b53" stroke-width="1.25"':'stroke="#99a8b6" stroke-width="1" stroke-dasharray="4 3"';
+ s.push('<line x1="'+pa[0].toFixed(2)+'" y1="'+pa[1].toFixed(2)+'" x2="'+pb[0].toFixed(2)+'" y2="'+pb[1].toFixed(2)+'" '+style+'/>');
+ }
+ s.push('<text x="'+(x+10)+'" y="'+(y+h-11)+'" font-family="Arial" font-size="11" fill="#536879">Προβολή | κλίμακα προσαρμοσμένη</text>');
+ }
+ s.push('<rect x="30" y="733" width="1122" height="76" fill="#fff" stroke="#152c43"/>');
+ let source=state.imported?state.fileName:({box:"Παραλληλεπίπεδο",bracket:"Γωνιακό προφίλ L",cylinder:"Κύλινδρος",tube:"Κοίλος σωλήνας"}[state.shape]);
+ s.push('<text x="43" y="755" font-family="Arial" font-size="12" fill="#4b6175">ΕΞΑΡΤΗΜΑ</text><text x="43" y="782" font-family="Arial" font-size="18" fill="#102c40" font-weight="bold">'+esc(source.slice(0,53))+'</text>');
+ s.push('<line x1="585" y1="733" x2="585" y2="809" stroke="#152c43"/>');
+ s.push('<text x="599" y="755" font-family="Arial" font-size="12" fill="#4b6175">ΟΡΙΟΘΕΤΗΣΗ (mm)</text>');
+ s.push('<text x="599" y="785" font-family="Arial" font-size="18" fill="#102c40">'+esc(dims)+'</text>');
+ s.push('<line x1="964" y1="733" x2="964" y2="809" stroke="#152c43"/>');
+ s.push('<text x="977" y="755" font-family="Arial" font-size="12" fill="#4b6175">ΜΟΡΦΟΤΥΠΟ</text><text x="977" y="785" font-family="Arial" font-size="18" fill="#102c40">ISO A3</text>');
+ return s.join("")+'</svg>';
+}
+function updateSheet(){$("sheetSvg").outerHTML=svgSheet().replace("<svg ","<svg id=\"sheetSvg\" ")}
+function updateAll(){
+ const points=xyzPoints(),b=bounds(points),spans=b.max.map((v,i)=>Math.max(0,v-b.min[i]));
+ $("dimensions").textContent="Όρια μοντέλου: "+spans.map(fmt).join(" × ")+" mm";
+ draw();updateSheet();
+ try{localStorage.setItem("saek_lab_settings",JSON.stringify({shape:state.shape,w:state.w,h:state.h,d:state.d,t:state.t}))}catch(e){}
+}
+function renderTab(tab){
+ for(const btn of document.querySelectorAll("[data-tab]"))btn.setAttribute("aria-selected",String(btn.dataset.tab===tab));
+ $("model").style.display=tab==="model"?"block":"none";
+ $("sheetWrap").style.display=tab==="sheet"?"block":"none";
+ $("lesson").style.display=tab==="lesson"?"block":"none";
+ if(tab==="model")requestAnimationFrame(draw);
+ if(tab==="sheet")updateSheet()
+}
+function openView(v){let p=poses[v];state.yaw=p[0];state.pitch=p[1];document.querySelectorAll("[data-view]").forEach(b=>b.classList.toggle("active",b.dataset.view===v));draw()}
+function readParams(){
+ for(const key of ["w","h","d","t"]){
+ let val=Number($(key).value);
+ if(!Number.isFinite(val)||val<=0)throw new Error("Συμπλήρωσε έγκυρες θετικές διαστάσεις.");
+ state[key]=clamp(val,1,1000);
+ }
+ if((state.shape==="bracket"||state.shape==="tube")&&state.t>=Math.min(state.w/2,state.h))throw new Error("Το πάχος πρέπει να είναι μικρότερο από το μισό πλάτος/ύψος.");
+}
+function changeParams(){
+ try{state.shape=$("shape").value;readParams();buildPrimitive();status("Το μοντέλο και οι όψεις ενημερώθηκαν.")}catch(err){status("Έλεγχος διαστάσεων: "+err.message)}
+}
+function reset(){state={...defaultState,triangles:[],fileName:"",imported:false};for(const x of ["shape","w","h","d","t"])$(x).value=state[x];buildPrimitive();openView("iso");status("Επαναφέρθηκαν οι αρχικές ρυθμίσεις.")}
+function saveFile(blob,name){const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000)}
+function exportSvg(){saveFile(new Blob([svgSheet()],{type:"image/svg+xml;charset=utf-8"}),"saek-technical-sheet-A3.svg");status("Το SVG δημιουργήθηκε στον υπολογιστή σου.")}
+async function exportPng(){
+ const svg=svgSheet(),data=new Blob([svg],{type:"image/svg+xml;charset=utf-8"}),url=URL.createObjectURL(data);
+ try{const img=new Image();await new Promise((res,rej)=>{img.onload=res;img.onerror=rej;img.src=url});
+ let can=document.createElement("canvas");can.width=2380;can.height=1684;let ctx=can.getContext("2d");ctx.fillStyle="#fff";ctx.fillRect(0,0,can.width,can.height);ctx.drawImage(img,0,0,can.width,can.height);
+ const blob=await new Promise(res=>can.toBlob(res,"image/png"));if(!blob)throw Error("Αποτυχία δημιουργίας PNG");
+ saveFile(blob,"saek-technical-sheet-A3.png");status("Το PNG δημιουργήθηκε στον υπολογιστή σου.")
+ }catch(err){status("Πρόβλημα εξαγωγής PNG: "+err.message)}finally{URL.revokeObjectURL(url)}
+}
+function exportPdf(){
+ const win=window.open("","_blank");if(!win){status("Επέτρεψε το αναδυόμενο παράθυρο για εκτύπωση σε PDF.");return}
+ const svg=svgSheet();
+ win.document.open();
+ win.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Τεχνικό σχέδιο Α3</title><style>@page{size:A3 landscape;margin:0}html,body{margin:0;padding:0;background:#fff}svg{width:420mm;height:297mm;display:block}button{display:none}</style></head><body>'+svg+'<script>window.onload=function(){window.print();}<\/script></body></html>');
+ win.document.close();status("Στο παράθυρο εκτύπωσης επίλεξε «Αποθήκευση ως PDF» και μέγεθος Α3 οριζόντιο.")
+}
+function centerMesh(tris){
+ const pts=tris.flat(),b=bounds(pts),center=b.min.map((v,i)=>(v+b.max[i])/2);
+ return tris.map(t=>t.map(p=>p.map((v,i)=>v-center[i])))
+}
+function readObj(text){
+ const vs=[],out=[];
+ for(const line of text.split(/\r?\n/)){
+ let l=line.trim();if(l.startsWith("v ")){let p=l.split(/\s+/).slice(1,4).map(Number);if(p.every(Number.isFinite))vs.push(p)}
+ else if(l.startsWith("f ")){
+ let ids=l.split(/\s+/).slice(1).map(s=>{let k=parseInt(s.split("/")[0],10);return k<0?vs.length+k:k-1});
+ for(let k=1;k<ids.length-1;k++)if([ids[0],ids[k],ids[k+1]].every(n=>vs[n]))tri(out,vs[ids[0]],vs[ids[k]],vs[ids[k+1]])
+ }
+ }return out
+}
+function readStl(buffer){
+ const dv=new DataView(buffer),out=[],ascii=new TextDecoder().decode(buffer.slice(0,Math.min(buffer.byteLength,1024)));
+ const count=buffer.byteLength>=84?dv.getUint32(80,true):0;
+ if(count>0&&84+count*50<=buffer.byteLength){
+ if(count>100000)throw Error("Πάρα πολλά τρίγωνα για τον browser.");
+ for(let i=0;i<count;i++){let o=84+i*50,p=[];for(let j=0;j<3;j++){p.push([dv.getFloat32(o+12+j*12,true),dv.getFloat32(o+16+j*12,true),dv.getFloat32(o+20+j*12,true)])}tri(out,...p)}
+ }else if(/solid/i.test(ascii)){
+ const re=/vertex\s+([+-]?[\d.eE]+)\s+([+-]?[\d.eE]+)\s+([+-]?[\d.eE]+)/g;let m,vs=[];
+ const raw=new TextDecoder().decode(buffer);while((m=re.exec(raw))!==null){vs.push([+m[1],+m[2],+m[3]]);if(vs.length===3){tri(out,...vs);vs=[]}}
+ }return out
+}
+function decodeDataUri(uri){let i=uri.indexOf(",");if(i<0)throw Error("Μη έγκυρο data URI");let meta=uri.slice(0,i),s=uri.slice(i+1);if(!meta.includes(";base64"))return new TextEncoder().encode(decodeURIComponent(s)).buffer;
+ let bin=atob(s),u=new Uint8Array(bin.length);for(let j=0;j<bin.length;j++)u[j]=bin.charCodeAt(j);return u.buffer}
+function getAccessor(doc,buffers,id){
+ let a=doc.accessors[id];if(!a||a.sparse)throw Error("Μη υποστηριζόμενο accessor (sparse).");
+ let view=doc.bufferViews[a.bufferView],buf=buffers[view.buffer],off=(view.byteOffset||0)+(a.byteOffset||0);
+ let n=({SCALAR:1,VEC2:2,VEC3:3,VEC4:4})[a.type],bytes=({5120:1,5121:1,5122:2,5123:2,5125:4,5126:4})[a.componentType];
+ if(!n||!bytes||!buf)throw Error("Άγνωστος τύπος glTF.");
+ let stride=view.byteStride||n*bytes,v=new DataView(buf),arr=[];
+ for(let i=0;i<a.count;i++){let row=[];for(let j=0;j<n;j++){
+ let p=off+i*stride+j*bytes,val;
+ if(a.componentType===5126)val=v.getFloat32(p,true);else if(a.componentType===5125)val=v.getUint32(p,true);
+ else if(a.componentType===5123)val=v.getUint16(p,true);else if(a.componentType===5122)val=v.getInt16(p,true);
+ else if(a.componentType===5121)val=v.getUint8(p);else val=v.getInt8(p);
+ row.push(val)
+ }arr.push(n===1?row[0]:row)}
+ return arr
+}
+function localTransform(p,node){
+ if(node.matrix){let m=node.matrix;return [m[0]*p[0]+m[4]*p[1]+m[8]*p[2]+m[12],m[1]*p[0]+m[5]*p[1]+m[9]*p[2]+m[13],m[2]*p[0]+m[6]*p[1]+m[10]*p[2]+m[14]]}
+ let sc=node.scale||[1,1,1],q=node.rotation||[0,0,0,1],t=node.translation||[0,0,0],v=p.map((x,i)=>x*sc[i]);
+ let u=q.slice(0,3),w=q[3],cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+ let uv=cross(u,v),uuv=cross(u,uv);return v.map((x,i)=>x+2*(w*uv[i]+uuv[i])+t[i])
+}
+async function readGltf(buffer,files,name){
+ let doc,bin=null;
+ if(name.toLowerCase().endsWith(".glb")){
+ let dv=new DataView(buffer);if(dv.getUint32(0,true)!==0x46546c67)throw Error("Μη έγκυρο GLB");
+ let off=12;
+ while(off+8<=buffer.byteLength){let len=dv.getUint32(off,true),type=dv.getUint32(off+4,true);off+=8;if(type===0x4e4f534a)doc=JSON.parse(new TextDecoder().decode(buffer.slice(off,off+len)).trim());if(type===0x004e4942)bin=buffer.slice(off,off+len);off+=len}
+ }else doc=JSON.parse(new TextDecoder().decode(buffer));
+ if(!doc||!doc.meshes)throw Error("Δεν βρέθηκαν γεωμετρικά δεδομένα glTF.");
+ const buffers=[];
+ for(let i=0;i<(doc.buffers||[]).length;i++){let b=doc.buffers[i],uri=b.uri;
+ if(!uri&&bin)buffers.push(bin);else if(uri&&uri.startsWith("data:"))buffers.push(decodeDataUri(uri));
+ else if(uri&&files.has(uri))buffers.push(await files.get(uri).arrayBuffer());
+ else throw Error("Λείπει συνοδευτικό .bin: "+(uri||"άγνωστο"))
+ }
+ const out=[],addMesh=(i,transform)=>{
+ let m=doc.meshes[i];if(!m)return;
+ for(let primitive of m.primitives||[]){
+ if(primitive.mode!==undefined&&primitive.mode!==4)continue;
+ let xyz=getAccessor(doc,buffers,primitive.attributes.POSITION),indices=primitive.indices!==undefined?getAccessor(doc,buffers,primitive.indices):xyz.map((_,i)=>i);
+ for(let k=0;k+2<indices.length;k+=3){let pts=[xyz[indices[k]],xyz[indices[k+1]],xyz[indices[k+2]]];if(pts.every(Boolean))tri(out,...pts.map(transform))}
+ }
+ };
+ const scene=doc.scenes?.[doc.scene||0],roots=scene?.nodes||doc.nodes?.map((_,i)=>i);
+ if(roots&&doc.nodes?.length){
+ const walk=(id,parent,depth)=>{if(depth>32)return;let node=doc.nodes[id];if(!node)return;let tf=p=>parent(localTransform(p,node));if(node.mesh!==undefined)addMesh(node.mesh,tf);for(const kid of node.children||[])walk(kid,tf,depth+1)};
+ for(const id of roots)walk(id,p=>p,0)
+ }else for(let i=0;i<doc.meshes.length;i++)addMesh(i,p=>p);
+ return out
+}
+async function loadFiles(fileList){
+ try{
+ const files=new Map([...fileList].map(f=>[f.name,f])),file=[...fileList].find(f=>/\.(stl|obj|glb|gltf)$/i.test(f.name));
+ if(!file)throw Error("Επίλεξε ένα αρχείο μοντέλου STL, OBJ, GLB ή glTF.");
+ if([...fileList].some(f=>f.size>15*1024*1024))throw Error("Το μέγεθος αρχείου δεν πρέπει να ξεπερνά τα 15 MB.");
+ status("Γίνεται ανάγνωση γεωμετρίας...");
+ let ext=file.name.split(".").pop().toLowerCase(),buffer=await file.arrayBuffer(),out;
+ if(ext==="obj")out=readObj(new TextDecoder().decode(buffer));else if(ext==="stl")out=readStl(buffer);else out=await readGltf(buffer,files,file.name);
+ if(!out.length)throw Error("Δεν βρέθηκαν τρίγωνα στο αρχείο.");
+ if(out.length>100000)throw Error("Το μοντέλο έχει πάνω από 100.000 τρίγωνα.");
+ if(out.flat().some(p=>p.some(v=>!Number.isFinite(v))))throw Error("Το αρχείο έχει μη έγκυρες συντεταγμένες.");
+ state.triangles=centerMesh(out);state.imported=true;state.fileName=file.name;state.zoom=1;openView("iso");updateAll();
+ status("Φορτώθηκε το "+file.name+" ("+out.length.toLocaleString("el-GR")+" τρίγωνα). Τα αρχεία έμειναν στη συσκευή σου.");
+ }catch(err){status("Αδυναμία εισαγωγής: "+err.message)}
+}
+const questions=[
+ {q:"Ποια όψη δείχνει συνήθως πλάτος και ύψος;",a:["Κάτοψη","Πρόσοψη","Πλάγια όψη"],correct:1,ex:"Η πρόσοψη αποτυπώνει συνήθως πλάτος και ύψος."},
+ {q:"Ποιο ζεύγος διαστάσεων απεικονίζεται στην κάτοψη;",a:["Πλάτος και βάθος","Ύψος και βάθος","Πλάτος και ύψος"],correct:0,ex:"Η κάτοψη προβάλλει το αντικείμενο από επάνω."},
+ {q:"Ποια όψη βοηθά περισσότερο να κατανοήσουμε συνολικά τον όγκο;",a:["Μόνο η πρόσοψη","Ισομετρική","Μόνο η κάτω όψη"],correct:1,ex:"Η ισομετρική προσφέρει τρισδιάστατη εποπτεία."},
+ {q:"Τι σημαίνει η ένδειξη mm;",a:["Μέτρα","Χιλιοστά","Μοίρες"],correct:1,ex:"Τα mm είναι χιλιοστά του μέτρου."}
+];
+let replies={};
+function renderQuiz(){
+ $("quiz").innerHTML=questions.map((q,i)=>'<div class="question"><strong>'+(i+1)+'. '+esc(q.q)+'</strong><div class="answers">'+q.a.map((a,j)=>'<button type="button" data-q="'+i+'" data-a="'+j+'" '+(replies[i]!==undefined?'disabled':'')+' class="'+(replies[i]!==undefined&&j===q.correct?'correct':replies[i]===j&&j!==q.correct?'wrong':'')+'">'+esc(a)+'</button>').join("")+'</div>'+(replies[i]!==undefined?'<div class="feedback">'+(replies[i]===q.correct?'✓ Σωστά. ':'✕ Λάθος. ')+esc(q.ex)+'</div>':'')+'</div>').join("");
+ let answered=Object.keys(replies).length,score=questions.reduce((n,q,i)=>n+(replies[i]===q.correct?1:0),0);
+ $("score").textContent=answered===questions.length?"Τελική βαθμολογία: "+score+"/"+questions.length:"Απαντήσεις: "+answered+"/"+questions.length+" | Σωστές: "+score
+}
+document.querySelectorAll("[data-tab]").forEach(b=>b.addEventListener("click",()=>renderTab(b.dataset.tab)));
+document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>openView(b.dataset.view)));
+for(const id of ["shape","w","h","d","t"])$(id).addEventListener("change",changeParams);
+$("reset").addEventListener("click",reset);
+$("saveModel").addEventListener("click",()=>{
+ const data={version:1,unit:"mm",shape:state.shape,w:state.w,h:state.h,d:state.d,t:state.t};
+ saveFile(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),"saek-model-parameters.json");status("Αποθηκεύτηκαν οι παράμετροι μοντέλου.")
+});
+$("upload").addEventListener("change",e=>loadFiles(e.target.files));
+$("toSheet").addEventListener("click",()=>renderTab("sheet"));
+for(const id of ["svgExport","sheetSvgExport"])$(id).addEventListener("click",exportSvg);
+for(const id of ["pngExport","sheetPngExport"])$(id).addEventListener("click",exportPng);
+for(const id of ["pdfExport","sheetPdfExport"])$(id).addEventListener("click",exportPdf);
+$("quiz").addEventListener("click",e=>{let b=e.target.closest("[data-q]");if(!b)return;let i=+b.dataset.q;if(replies[i]===undefined){replies[i]=+b.dataset.a;renderQuiz()}});
+$("restartQuiz").addEventListener("click",()=>{replies={};renderQuiz()});
+let drag=null,canvas=$("viewer");
+canvas.addEventListener("pointerdown",e=>{drag=[e.clientX,e.clientY];canvas.setPointerCapture(e.pointerId)});
+canvas.addEventListener("pointermove",e=>{if(!drag)return;let dx=e.clientX-drag[0],dy=e.clientY-drag[1];state.yaw+=dx*.012;state.pitch=clamp(state.pitch+dy*.012,-Math.PI/2+.01,Math.PI/2-.01);drag=[e.clientX,e.clientY];document.querySelectorAll("[data-view]").forEach(b=>b.classList.remove("active"));draw()});
+canvas.addEventListener("pointerup",()=>{drag=null});canvas.addEventListener("pointercancel",()=>{drag=null});
+canvas.addEventListener("wheel",e=>{e.preventDefault();state.zoom=clamp(state.zoom*(e.deltaY>0?.9:1.1),.3,5);draw()},{passive:false});
+new ResizeObserver(()=>{if($("model").style.display!=="none")draw()}).observe(canvas);
+try{const stored=JSON.parse(localStorage.getItem("saek_lab_settings")||"null");if(stored&&["box","bracket","cylinder","tube"].includes(stored.shape)){for(const k of ["shape","w","h","d","t"])if(stored[k]!==undefined){state[k]=stored[k];$(k).value=stored[k]}}}catch(e){}
+try{readParams()}catch(e){reset()}
+buildPrimitive();renderQuiz();openView("iso");
+</script>
+</body></html>
